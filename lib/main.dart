@@ -16,19 +16,27 @@ void main() async {
   http.Response responseOIBR = await http.get(requestOIBR);
 
   var _vvar = {
+    "symbol": json.decode(responseVVAR.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseVVAR.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseVVAR.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _flry = {
+    "symbol": json.decode(responseFLRY.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseFLRY.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseFLRY.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _sqia = {
+    "symbol": json.decode(responseSQIA.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseSQIA.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseSQIA.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _oibr = {
+    "symbol": json.decode(responseOIBR.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseOIBR.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseOIBR.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _total = (70 * double.parse(_vvar['price'])) 
@@ -58,6 +66,159 @@ void main() async {
                         fontSize: 50,
                       ),
                     ),
+                ),
+                Padding(padding: EdgeInsets.only(top: 20, bottom: 20)),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          _vvar['symbol'],
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "R\$ ${(70 * double.parse(_vvar['price'])).toStringAsFixed(2)}",
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          double.parse(_vvar['price']).toStringAsFixed(2),
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "${_vvar['change_percent']}%",
+                          style: TextStyle(
+                            color: double.parse((_vvar['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          _flry['symbol'],
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "R\$ ${(70 * double.parse(_flry['price'])).toStringAsFixed(2)}",
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          double.parse(_flry['price']).toStringAsFixed(2),
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "${_flry['change_percent']}%",
+                          style: TextStyle(
+                            color: double.parse((_flry['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          _sqia['symbol'],
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "R\$ ${(70 * double.parse(_sqia['price'])).toStringAsFixed(2)}",
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          double.parse(_sqia['price']).toStringAsFixed(2),
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "${_sqia['change_percent']}%",
+                          style: TextStyle(
+                            color: double.parse((_sqia['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          _oibr['symbol'],
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "R\$ ${(70 * double.parse(_oibr['price'])).toStringAsFixed(2)}",
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          double.parse(_oibr['price']).toStringAsFixed(2),
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "${_oibr['change_percent']}%",
+                          style: TextStyle(
+                            color: double.parse((_oibr['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
