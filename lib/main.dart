@@ -109,7 +109,7 @@ void main() async {
                             "${_vvar['change_percent']}%",
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
-                                color: double.parse((_vvar['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                color: double.parse((_vvar['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                 fontSize: 20,
                               ),
                             ),
@@ -155,7 +155,7 @@ void main() async {
                             "${_flry['change_percent']}%",
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
-                                color: double.parse((_flry['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                color: double.parse((_flry['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                 fontSize: 20,
                               ),
                             ),
@@ -201,7 +201,7 @@ void main() async {
                             "${_sqia['change_percent']}%",
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
-                                color: double.parse((_sqia['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                color: double.parse((_sqia['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                 fontSize: 20,
                               ),
                             ),
@@ -247,7 +247,7 @@ void main() async {
                             "${_oibr['change_percent']}%",
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
-                                color: double.parse((_oibr['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                color: double.parse((_oibr['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                 fontSize: 20,
                               ),
                             ),
