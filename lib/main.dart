@@ -1,111 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'dart:convert';
 
-void main() => runApp(MyApp());
+const requestVVAR = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=VVAR3.SAO&apikey=X0KLX0CI9BQBNGFR";
+const requestFLRY = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=FLRY3.SAO&apikey=X0KLX0CI9BQBNGFR";
+const requestSQIA = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=SQIA3.SAO&apikey=X0KLX0CI9BQBNGFR";
+const requestOIBR = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=OIBR4.SAO&apikey=X0KLX0CI9BQBNGFR";
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+void main() async {
+  http.Response responseVVAR = await http.get(requestVVAR);
+  http.Response responseFLRY = await http.get(requestFLRY);
+  http.Response responseSQIA = await http.get(requestSQIA);
+  http.Response responseOIBR = await http.get(requestOIBR);
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  var _vvar = {
+    "price": json.decode(responseVVAR.body)["Global Quote"]["05. price"],
+  };
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  var _flry = {
+    "price": json.decode(responseFLRY.body)["Global Quote"]["05. price"],
+  };
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  var _sqia = {
+    "price": json.decode(responseSQIA.body)["Global Quote"]["05. price"],
+  };
 
-  final String title;
+  var _oibr = {
+    "price": json.decode(responseOIBR.body)["Global Quote"]["05. price"],
+  };
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
+  var _total = (70 * double.parse(_vvar['price'])) 
+    + (21 * double.parse(_flry['price']))
+    + (25 * double.parse(_sqia['price']))
+    + (100 * double.parse(_oibr['price']));
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Material(
+        child: Center(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 15.0, right: 15.0),
+                  decoration: new BoxDecoration(
+                    color: (_total - 2508.68) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853), 
+                    borderRadius: new BorderRadius.circular(16.0),
+                  ),
+                  child:
+                    Text(
+                      "R\$ ${(_total - 2508.68).toStringAsFixed(2)}",
+                      style: TextStyle(
+                        color: Color(0XFFFFFFFF),
+                        fontSize: 50,
+                      ),
+                    ),
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
+          ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
+    )
+  ));
 }
