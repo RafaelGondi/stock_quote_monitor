@@ -16,19 +16,27 @@ void main() async {
   http.Response responseOIBR = await http.get(requestOIBR);
 
   var _vvar = {
+    "symbol": json.decode(responseVVAR.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseVVAR.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseVVAR.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _flry = {
+    "symbol": json.decode(responseFLRY.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseFLRY.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseFLRY.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _sqia = {
+    "symbol": json.decode(responseSQIA.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseSQIA.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseSQIA.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _oibr = {
+    "symbol": json.decode(responseOIBR.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
     "price": json.decode(responseOIBR.body)["Global Quote"]["05. price"],
+    "change_percent": json.decode(responseOIBR.body)["Global Quote"]["10. change percent"].replaceAll('%', ''),
   };
 
   var _total = (70 * double.parse(_vvar['price'])) 
