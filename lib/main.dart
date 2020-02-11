@@ -49,6 +49,7 @@ void main() async {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Material(
+        color: Color(0xFFFAFAFA),
           child: Center(
             child: Container(
               child: Column(
