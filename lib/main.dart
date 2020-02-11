@@ -145,6 +145,45 @@ void main() async {
                     ),
                   ),
                 ),
+                Padding(padding: EdgeInsets.only(top: 20, bottom: 20)),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          _sqia['symbol'],
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "R\$ ${(70 * double.parse(_sqia['price'])).toStringAsFixed(2)}",
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          double.parse(_sqia['price']).toStringAsFixed(2),
+                          style: TextStyle(
+                            color: Color(0xFF2A2B2D),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "${_sqia['change_percent']}%",
+                          style: TextStyle(
+                            color: double.parse((_sqia['price'])) > 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
