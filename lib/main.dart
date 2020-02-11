@@ -106,7 +106,6 @@ void main() async {
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top: 20, bottom: 20)),
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -145,7 +144,6 @@ void main() async {
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top: 20, bottom: 20)),
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -184,7 +182,6 @@ void main() async {
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top: 20, bottom: 20)),
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
