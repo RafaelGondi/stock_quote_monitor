@@ -56,7 +56,7 @@ void main() async {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(top: 80, left: 20, bottom: 30),
+                    padding: EdgeInsets.only(top: 80, left: 20),
                     child: Text(
                       "Balance",
                       style: GoogleFonts.montserrat(
@@ -69,6 +69,7 @@ void main() async {
                   ),
                 ],
               ),
+              Padding(padding: EdgeInsets.only(top: 20, bottom: 20)),
               Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
