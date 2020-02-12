@@ -131,10 +131,18 @@ void main() async {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Padding(padding: EdgeInsets.only(top: 20, bottom: 20)),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        child: Row(
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Card(
+                        shape: Border(
+                          left: BorderSide(
+                            color: double.parse((_vvar['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                            width: 5
+                          )
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               RichText(
@@ -205,12 +213,21 @@ void main() async {
                               ),
                             ],
                           ),
+                        ),
                       ),
                     ),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        child: Row(
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Card(
+                        shape: Border(
+                            left: BorderSide(
+                              color: double.parse((_flry['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                              width: 5
+                            )
+                          ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               RichText(
@@ -281,12 +298,21 @@ void main() async {
                               ),
                             ],
                           ),
+                        ),
                       ),
                     ),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        child: Row(
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Card(
+                        shape: Border(
+                            left: BorderSide(
+                              color: double.parse((_sqia['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                              width: 5
+                            )
+                          ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               RichText(
@@ -357,12 +383,21 @@ void main() async {
                               ),
                             ],
                           ),
+                        ),
                       ),
                     ),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        child: Row(
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Card(
+                        shape: Border(
+                            left: BorderSide(
+                              color: double.parse((_oibr['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                              width: 5
+                            )
+                          ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               RichText(
@@ -433,6 +468,7 @@ void main() async {
                               ),
                             ],
                           ),
+                        ),
                       ),
                     ),
                   ],
