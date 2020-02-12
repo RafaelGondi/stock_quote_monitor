@@ -191,7 +191,7 @@ void main() async {
                               ),
                               RichText(
                                 text: TextSpan(
-                                  text: double.parse(_vvar['price']).toStringAsFixed(2),
+                                  text: "R\$ ${double.parse(_vvar['price']).toStringAsFixed(2)}",
                                   style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: Color(0xFF2A2B2D),
@@ -276,7 +276,7 @@ void main() async {
                               ),
                               RichText(
                                 text: TextSpan(
-                                  text: double.parse(_flry['price']).toStringAsFixed(2),
+                                  text: "R\$ ${double.parse(_flry['price']).toStringAsFixed(2)}",
                                   style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: Color(0xFF2A2B2D),
@@ -361,7 +361,7 @@ void main() async {
                               ),
                               RichText(
                                 text: TextSpan(
-                                  text: double.parse(_sqia['price']).toStringAsFixed(2),
+                                  text: "R\$ ${double.parse(_sqia['price']).toStringAsFixed(2)}",
                                   style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: Color(0xFF2A2B2D),
@@ -446,7 +446,7 @@ void main() async {
                               ),
                               RichText(
                                 text: TextSpan(
-                                  text: double.parse(_oibr['price']).toStringAsFixed(2),
+                                  text: "R\$ ${double.parse(_oibr['price']).toStringAsFixed(2)}",
                                   style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: Color(0xFF2A2B2D),
