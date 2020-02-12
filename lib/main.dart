@@ -135,184 +135,304 @@ void main() async {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text(
-                              _vvar['symbol'],
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              RichText(
+                                text: TextSpan(
+                                  text: _vvar['symbol'],
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\n${_vvar['change_percent']}%",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: double.parse((_vvar['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "R\$ ${(70 * double.parse(_vvar['price'])).toStringAsFixed(2)}",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: "R\$ ${(70 * double.parse(_vvar['price'])).toStringAsFixed(2)}",
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nAmount invested",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              double.parse(_vvar['price']).toStringAsFixed(2),
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: double.parse(_vvar['price']).toStringAsFixed(2),
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nStock quote",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "${_vvar['change_percent']}%",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: double.parse((_vvar['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                       ),
                     ),
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text(
-                              _flry['symbol'],
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              RichText(
+                                text: TextSpan(
+                                  text: _flry['symbol'],
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\n${_flry['change_percent']}%",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: double.parse((_flry['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "R\$ ${(70 * double.parse(_flry['price'])).toStringAsFixed(2)}",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: "R\$ ${(21 * double.parse(_flry['price'])).toStringAsFixed(2)}",
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nAmount invested",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              double.parse(_flry['price']).toStringAsFixed(2),
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: double.parse(_flry['price']).toStringAsFixed(2),
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nStock quote",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "${_flry['change_percent']}%",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: double.parse((_flry['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                       ),
                     ),
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text(
-                              _sqia['symbol'],
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              RichText(
+                                text: TextSpan(
+                                  text: _sqia['symbol'],
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\n${_sqia['change_percent']}%",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: double.parse((_sqia['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "R\$ ${(70 * double.parse(_sqia['price'])).toStringAsFixed(2)}",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: "R\$ ${(25 * double.parse(_sqia['price'])).toStringAsFixed(2)}",
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nAmount invested",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              double.parse(_sqia['price']).toStringAsFixed(2),
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: double.parse(_sqia['price']).toStringAsFixed(2),
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nStock quote",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "${_sqia['change_percent']}%",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: double.parse((_sqia['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                       ),
                     ),
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text(
-                              _oibr['symbol'],
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              RichText(
+                                text: TextSpan(
+                                  text: _oibr['symbol'],
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\n${_oibr['change_percent']}%",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: double.parse((_oibr['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "R\$ ${(70 * double.parse(_oibr['price'])).toStringAsFixed(2)}",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: "R\$ ${(100 * double.parse(_oibr['price'])).toStringAsFixed(2)}",
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nAmount invested",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              double.parse(_oibr['price']).toStringAsFixed(2),
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF2A2B2D),
-                                  fontSize: 20,
+                              RichText(
+                                text: TextSpan(
+                                  text: double.parse(_oibr['price']).toStringAsFixed(2),
+                                  style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF2A2B2D),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: "\nStock quote",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: Color(0xFF777777),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Text(
-                              "${_oibr['change_percent']}%",
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: double.parse((_oibr['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                       ),
                     ),
                   ],
