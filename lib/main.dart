@@ -126,6 +126,7 @@ void main() async {
                 ],
               ),
               Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
