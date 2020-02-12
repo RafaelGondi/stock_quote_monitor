@@ -156,10 +156,10 @@ void main() async {
                                 ),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: "\n${_vvar['change_percent']}%",
+                                      text: "\n ${double.parse(_vvar['change_percent']).toStringAsFixed(2)}%",
                                       style: GoogleFonts.montserrat(
                                         textStyle: TextStyle(
-                                          color: double.parse((_vvar['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          color: double.parse((_vvar['change_percent'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                           fontSize: 15,
                                         ),
                                       ),
@@ -241,10 +241,10 @@ void main() async {
                                 ),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: "\n${_flry['change_percent']}%",
+                                      text: "\n ${double.parse(_flry['change_percent']).toStringAsFixed(2)}%",
                                       style: GoogleFonts.montserrat(
                                         textStyle: TextStyle(
-                                          color: double.parse((_flry['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          color: double.parse((_flry['change_percent'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                           fontSize: 15,
                                         ),
                                       ),
@@ -326,10 +326,10 @@ void main() async {
                                 ),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: "\n${_sqia['change_percent']}%",
+                                      text: "\n ${double.parse(_sqia['change_percent']).toStringAsFixed(2)}%",
                                       style: GoogleFonts.montserrat(
                                         textStyle: TextStyle(
-                                          color: double.parse((_sqia['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          color: double.parse((_sqia['change_percent'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                           fontSize: 15,
                                         ),
                                       ),
@@ -411,10 +411,10 @@ void main() async {
                                 ),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: "\n${_oibr['change_percent']}%",
+                                      text: "\n ${double.parse(_oibr['change_percent']).toStringAsFixed(2)}%",
                                       style: GoogleFonts.montserrat(
                                         textStyle: TextStyle(
-                                          color: double.parse((_oibr['price'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
+                                          color: double.parse((_oibr['change_percent'])) < 0 ? Color(0xFFe8505a) : Color(0xFF34a853),
                                           fontSize: 15,
                                         ),
                                       ),
