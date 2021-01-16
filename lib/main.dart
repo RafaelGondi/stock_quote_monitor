@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,44 +40,26 @@ class _HomeState extends State<Home> {
   var _totalizer;
   int touchedIndex;
 
-  List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+  List<PieChartSectionData> showingSections(fii_pct, stock_pct) {
+    return List.generate(2, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xff0293ee),
-            value: 40,
-            title: '40%',
+            color: const Color(0xff1B88DF),
+            value: double.parse(stock_pct),
+            title: '${stock_pct}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
           );
         case 1:
           return PieChartSectionData(
-            color: const Color(0xfff8b250),
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: const Color(0xff845bef),
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: const Color(0xff13d38e),
-            value: 15,
-            title: '15%',
+            color: const Color(0xffFBAA32),
+            value: double.parse(fii_pct),
+            title: '${fii_pct}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
@@ -111,12 +91,14 @@ class _HomeState extends State<Home> {
   var _total = 0;
 
   var initialInvestment = 2230.95;
+  var stocksInitialInvestment = 1613.83;
+  var fiisInitialInvestment = 617.12;
 
-  var stocksNames = ['ALSO3', 'BBAS3'/*, 'BIDI11',
+  var stocksNames = ['ALSO3', 'BBAS3', 'BIDI11',
     'BRFS3', 'CYRE3', 'ENEV3', 'GMAT3', 'GOAU4', 'ITUB4', 'LAME4', 'LREN3', 'LWSA3',
-    'MGLU3', 'NTCO3', 'PETR4', 'PSSA3', 'RLOG3', 'TOTS3', 'VALE3', 'VIVT3'*/];
+    'MGLU3', 'NTCO3', 'PETR4', 'PSSA3', 'RLOG3', 'TOTS3', 'VALE3', 'VIVT3'];
 
-  var fiisNames = ['ALZR11'/*, 'BCFF11', 'HGLG11'*/];
+  var fiisNames = ['ALZR11', 'BCFF11', 'HGLG11'];
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +112,22 @@ class _HomeState extends State<Home> {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
                   return Center(
-                    child: Text("Carregando dados..."),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Carregando dados...',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            )
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 default:
                   if (snapshot.hasError) {
@@ -149,16 +146,22 @@ class _HomeState extends State<Home> {
                                 child: AppBar(
                                   elevation: 0,
                                   backgroundColor: Colors.white,
-                                  bottom: TabBar(
-                                    indicatorColor: Colors.grey,
-                                    labelColor: Colors.black,
-                                    unselectedLabelColor: Colors.grey,
-                                    isScrollable: true,
-                                    tabs: [
-                                      Tab(text: "Resumo"),
-                                      Tab(text: "Ações"),
-                                      Tab(text: "Fundos"),
-                                    ],
+                                  bottom: PreferredSize(
+                                      preferredSize: const Size.fromHeight(kToolbarHeight),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: TabBar(
+                                          indicatorColor: Colors.grey,
+                                          labelColor: Colors.black,
+                                          unselectedLabelColor: Colors.grey,
+                                          isScrollable: true,
+                                          tabs: [
+                                            Tab(text: "Resumo"),
+                                            Tab(text: "Ações"),
+                                            Tab(text: "Fundos"),
+                                          ],
+                                        ),
+                                      ),
                                   ),
                                   flexibleSpace: Container(
                                     child: Column(
@@ -208,8 +211,9 @@ class _HomeState extends State<Home> {
                                                       text: "R\$ ${(snapshot.data['total'] - initialInvestment).toStringAsFixed(2)}",
                                                       style: GoogleFonts.inter(
                                                         textStyle: TextStyle(
+                                                          fontWeight: FontWeight.bold,
                                                           color: (snapshot.data['total'] - initialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
-                                                          fontSize: 20,
+                                                          fontSize: 22,
                                                         ),
                                                       ),
                                                     ),
@@ -268,7 +272,7 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                 ),
-                                preferredSize: Size.fromHeight(180.0),
+                                preferredSize: Size.fromHeight(200.0),
                               ),
                               floatingActionButton: FloatingActionButton(
                                 onPressed: () {
@@ -280,171 +284,250 @@ class _HomeState extends State<Home> {
                               body: TabBarView(
                                   children: [
                                     SingleChildScrollView(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          AspectRatio(
-                                            aspectRatio: 1.3,
-                                            child: Container(
-                                              child: Column(
-                                                children: <Widget>[
-                                                  const SizedBox(
-                                                    height: 14,
-                                                  ),
-                                                  Expanded(
-                                                    child: AspectRatio(
-                                                      aspectRatio: 1,
-                                                      child: PieChart(
-                                                        PieChartData(
-                                                            borderData: FlBorderData(
-                                                              show: false,
-                                                            ),
-                                                            sectionsSpace: 0,
-                                                            centerSpaceRadius: 75,
-                                                            sections: showingSections()),
+                                      child: Container(
+                                        padding: EdgeInsets.only(top: 20),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            AspectRatio(
+                                              aspectRatio: 1.3,
+                                              child: Container(
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    const SizedBox(
+                                                      height: 14,
+                                                    ),
+                                                    Expanded(
+                                                      child: AspectRatio(
+                                                        aspectRatio: 1,
+                                                        child: PieChart(
+                                                          PieChartData(
+                                                              borderData: FlBorderData(
+                                                                show: false,
+                                                              ),
+                                                              sectionsSpace: 0,
+                                                              centerSpaceRadius: 75,
+                                                              sections: showingSections((snapshot.data['fiis_total'] * 100 / snapshot.data['total']).toStringAsFixed(1), (snapshot.data['stocks_total'] * 100 / snapshot.data['total']).toStringAsFixed(1))
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const <Widget>[
-                                                      SizedBox(
-                                                        height: 20,
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(top: 8.0),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.max,
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: const <Widget>[
+                                                          Padding(
+                                                            padding: EdgeInsets.all(8.0),
+                                                            child: Indicator(
+                                                              color: Color(0xff1B88DF),
+                                                              text: 'Ações',
+                                                              isSquare: false,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.all(8.0),
+                                                            child: Indicator(
+                                                              color: Color(0xffFBAA32),
+                                                              text: 'Fiis',
+                                                              isSquare: false,
+                                                            ),
+                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 4,
+                                                          // ),
+                                                          // Indicator(
+                                                          //   color: Color(0xff845bef),
+                                                          //   text: 'ETF',
+                                                          //   isSquare: false,
+                                                          // ),
+                                                          // SizedBox(
+                                                          //   height: 4,
+                                                          // ),
+                                                          // Indicator(
+                                                          //   color: Color(0xff13d38e),
+                                                          //   text: 'Small Caps',
+                                                          //   isSquare: false,
+                                                          // ),
+                                                          // SizedBox(
+                                                          //   height: 18,
+                                                          // ),
+                                                        ],
                                                       ),
-                                                      Indicator(
-                                                        color: Color(0xff0293ee),
-                                                        text: 'Ações',
-                                                        isSquare: false,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 4,
-                                                      ),
-                                                      Indicator(
-                                                        color: Color(0xfff8b250),
-                                                        text: 'Fiis',
-                                                        isSquare: false,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 4,
-                                                      ),
-                                                      Indicator(
-                                                        color: Color(0xff845bef),
-                                                        text: 'ETF',
-                                                        isSquare: false,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 4,
-                                                      ),
-                                                      Indicator(
-                                                        color: Color(0xff13d38e),
-                                                        text: 'Small Caps',
-                                                        isSquare: false,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 18,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 28,
-                                                  ),
-                                                ],
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 28,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
 
 
 
 
 
-                                          Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(15.0),
-                                                child: Card(
-                                                  shape: Border(
-                                                    left: BorderSide(
-                                                      color: Color(0xFFBCBCBC),
-                                                      width: 5
-                                                    )
-                                                  ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                      children: <Widget>[
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "Ações",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 25,
+                                            Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                                                Card(
+                                                    color: Color(0xffFAFBFE),
+                                                    shape: RoundedRectangleBorder(
+                                                      side: BorderSide(color: Color(0xffdde2e7), width: 2),
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    elevation: 0,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.fromLTRB(16.0, 30.0, 16.0, 20.0),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: <Widget>[
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text: "Investimento em ações",
+                                                                style: GoogleFonts.inter(
+                                                                textStyle: TextStyle(
+                                                                  color: Color(0xFF2A2B2D),
+                                                                  fontSize: 18,
+                                                                  fontWeight: FontWeight.bold,
+                                                                ),
+                                                              ),
+                                                              ),
+                                                            ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(top: 8.0),
+                                                            child: Row(
+                                                              children: [
+                                                                RichText(
+                                                                  text: TextSpan(
+                                                                    text: "R\$ ${(stocksInitialInvestment).toStringAsFixed(2)} ",
+                                                                    style: GoogleFonts.inter(
+                                                                      textStyle: TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontSize: 18,
+                                                                      ),
+                                                                    ),
+                                                                    children: <TextSpan>[
+                                                                      TextSpan(
+                                                                        text: "(",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: "R\$ ${(snapshot.data['stocks_total'] - stocksInitialInvestment).toStringAsFixed(2)}",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            fontWeight: FontWeight.bold,
+                                                                            color: (snapshot.data['stocks_total'] - stocksInitialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
+                                                                            fontSize: 14,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: ")",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
                                                             ),
                                                           ),
-                                                          ),
-                                                        ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "R\$ ${(snapshot.data['stocks_total']).toStringAsFixed(2)}",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(15.0),
-                                                child: Card(
-                                                  shape: Border(
-                                                    left: BorderSide(
-                                                      color: Color(0xFFBCBCBC),
-                                                      width: 5
-                                                    )
-                                                  ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                      children: <Widget>[
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "Fundos",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 25,
+                                                Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                                                Card(
+                                                    color: Color(0xffFAFBFE),
+                                                    shape: RoundedRectangleBorder(
+                                                      side: BorderSide(color: Color(0xffdde2e7), width: 2),
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    elevation: 0,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: <Widget>[
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text: "Investimento em fundos",
+                                                                style: GoogleFonts.inter(
+                                                                textStyle: TextStyle(
+                                                                  color: Color(0xFF2A2B2D),
+                                                                  fontSize: 18,
+                                                                  fontWeight: FontWeight.bold,
+                                                                ),
+                                                              ),
+                                                              ),
+                                                            ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(top: 8.0),
+                                                            child: Row(
+                                                              children: [
+                                                                RichText(
+                                                                  text: TextSpan(
+                                                                    text: "R\$ ${(fiisInitialInvestment).toStringAsFixed(2)} ",
+                                                                    style: GoogleFonts.inter(
+                                                                      textStyle: TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontSize: 18,
+                                                                      ),
+                                                                    ),
+                                                                    children: <TextSpan>[
+                                                                      TextSpan(
+                                                                        text: "(",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: "R\$ ${(snapshot.data['fiis_total'] - fiisInitialInvestment).toStringAsFixed(2)}",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            fontWeight: FontWeight.bold,
+                                                                            color: (snapshot.data['fiis_total'] - fiisInitialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
+                                                                            fontSize: 14,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: ")",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
                                                             ),
                                                           ),
-                                                          ),
-                                                        ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "R\$ ${(snapshot.data['fiis_total']).toStringAsFixed(2)}",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     Container(

@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 import 'dart:convert';
-import 'package:google_fonts/google_fonts.dart';
 
 Future<Map> _fiisMap (fiisName, qtd) async {
   http.Response stockResponse = await http.get("https://mfinance.com.br/api/v1/fiis?symbols=${fiisName}");
@@ -62,19 +58,17 @@ Future<Map> _stockMap (stockName, qtd) async {
 }
 
 Future<Map> totalizer() async {
-  var stocksNames = ['ALSO3', 'BBAS3'/*, 'BIDI11',
+  var stocksNames = ['ALSO3', 'BBAS3', 'BIDI11',
     'BRFS3', 'CYRE3', 'ENEV3', 'GMAT3', 'GOAU4', 'ITUB4', 'LAME4', 'LREN3', 'LWSA3',
-    'MGLU3', 'NTCO3', 'PETR4', 'PSSA3', 'RLOG3', 'TOTS3', 'VALE3', 'VIVT3'*/];
+    'MGLU3', 'NTCO3', 'PETR4', 'PSSA3', 'RLOG3', 'TOTS3', 'VALE3', 'VIVT3'];
 
-  var fiisNames = ['ALZR11'/*, 'BCFF11', 'HGLG11'*/];
+  var fiisNames = ['ALZR11', 'BCFF11', 'HGLG11'];
 
-  var stocksQuantities = [2.0, 4.0/*, 2.0, 2.0, 2.0, 1.0,
+  var stocksQuantities = [2.0, 4.0, 2.0, 2.0, 2.0, 1.0,
     3.0, 4.0, 2.0, 2.0, 2.0, 1.0, 4.0, 3.0, 3.0,
-    1.0, 1.0, 2.0, 2.0, 1.0*/];
+    1.0, 1.0, 2.0, 2.0, 1.0];
 
-  var fiisQuantities = [2.0/*, 2.0, 1.0*/];
-
-  print("q");
+  var fiisQuantities = [2.0, 2.0, 1.0];
 
   var stocksObj = {};
   var total = 0.0;
@@ -95,46 +89,25 @@ Future<Map> totalizer() async {
   _totalizer['stocks'] = new Map<String, dynamic>();
   _totalizer['fiis'] = new Map<String, dynamic>();
 
-  print("before for");
-
   for (var i = 0; i < fiisNames.length; i++) {
-    print("ue");
-    print("fiisNames[i]: " + fiisNames[i]);
-    print("fiisQuantities[i]: ");
-    print(fiisQuantities[i]);
     _totalizer['fiis'][fiisNames[i]] = await _fiisMap(fiisNames[i], fiisQuantities[i]);
   }
-
-  print("fii maps passed");
 
   for (var i = 0; i < stocksNames.length; i++) {
     _totalizer['stocks'][stocksNames[i]] = await _stockMap(stocksNames[i], stocksQuantities[i]);
   }
-
-  print("maps passed");
 
   for (var i = 0; i < fiisNames.length; i++) { 
     total = total + _totalizer['fiis'][fiisNames[i]]['amount_invested'];
     _totalizer['fiis_total'] = _totalizer['fiis_total'] + _totalizer['fiis'][fiisNames[i]]['amount_invested'];
   }
 
-  print("FT1");
-
   for (var i = 0; i < stocksNames.length; i++) { 
     total = total + _totalizer['stocks'][stocksNames[i]]['amount_invested'];
     _totalizer['stocks_total'] = _totalizer['stocks_total'] + _totalizer['stocks'][stocksNames[i]]['amount_invested'];
-
-    print(stocksNames[i]);
-    print(_totalizer['stocks'][stocksNames[i]]['amount_invested']);
   }
 
-  print("FT2");
-
-  _totalizer['total'] = total;
-
-  print("\n\n--------------------------------");
-  print(_totalizer);
-  print("--------------------------------\n\n");
+  _totalizer['total'] = _totalizer['stocks_total'] + _totalizer['fiis_total'];
 
   return _totalizer;
 }
