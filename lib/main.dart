@@ -8,10 +8,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'indicator.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import 'builder.dart';
 
 void main() async {
+  Intl.defaultLocale = 'pt_BR';
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -40,11 +43,11 @@ class _HomeState extends State<Home> {
   var _totalizer;
   int touchedIndex;
 
-  List<PieChartSectionData> showingSections(fii_pct, stock_pct) {
-    return List.generate(2, (i) {
+  List<PieChartSectionData> showingSections(fii_pct, stock_pct, crypto_pct) {
+    return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
-      final double fontSize = isTouched ? 25 : 16;
-      final double radius = isTouched ? 60 : 50;
+      final double fontSize = isTouched ? 25 : 15;
+      final double radius = isTouched ? 60 : 48;
       switch (i) {
         case 0:
           return PieChartSectionData(
@@ -60,6 +63,15 @@ class _HomeState extends State<Home> {
             color: const Color(0xffFBAA32),
             value: double.parse(fii_pct),
             title: '${fii_pct}%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: const Color(0xff9759CF),
+            value: double.parse(crypto_pct),
+            title: '${crypto_pct}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
@@ -90,15 +102,18 @@ class _HomeState extends State<Home> {
 
   var _total = 0;
 
-  var initialInvestment = 2230.95;
+  var initialInvestment = 3058.48;
   var stocksInitialInvestment = 1613.83;
-  var fiisInitialInvestment = 617.12;
+  var fiisInitialInvestment = 1194.65;
+  var cryptoInitialInvestment = 250.0;
 
   var stocksNames = ['ALSO3', 'BBAS3', 'BIDI11',
     'BRFS3', 'CYRE3', 'ENEV3', 'GMAT3', 'GOAU4', 'ITUB4', 'LAME4', 'LREN3', 'LWSA3',
     'MGLU3', 'NTCO3', 'PETR4', 'PSSA3', 'RLOG3', 'TOTS3', 'VALE3', 'VIVT3'];
 
-  var fiisNames = ['ALZR11', 'BCFF11', 'HGLG11'];
+  var fiisNames = ['ALZR11', 'BCFF11', 'HGLG11', 'HGBS11', 'TEPP11'];
+
+  var cryptoNames = ['BTC', 'ETH'];
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +154,7 @@ class _HomeState extends State<Home> {
                       margin: EdgeInsets.only(right: 10, left: 10, bottom: 20),
                       child:
                           DefaultTabController(
-                            length: 3,
+                            length: 4,
                             child: Scaffold(
                               backgroundColor: Colors.white,
                               appBar: PreferredSize(
@@ -159,6 +174,7 @@ class _HomeState extends State<Home> {
                                             Tab(text: "Resumo"),
                                             Tab(text: "Ações"),
                                             Tab(text: "Fundos"),
+                                            Tab(text: "Criptomoedas"),
                                           ],
                                         ),
                                       ),
@@ -190,7 +206,7 @@ class _HomeState extends State<Home> {
                                               padding: EdgeInsets.only(left: 20),
                                               child: RichText(
                                                 text: TextSpan(
-                                                  text: "R\$ ${(initialInvestment).toStringAsFixed(2)} ",
+                                                  text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(initialInvestment)}",
                                                   style: GoogleFonts.inter(
                                                     textStyle: TextStyle(
                                                       color: Colors.black,
@@ -199,7 +215,7 @@ class _HomeState extends State<Home> {
                                                   ),
                                                   children: <TextSpan>[
                                                     TextSpan(
-                                                      text: "(",
+                                                      text: " (",
                                                       style: GoogleFonts.inter(
                                                         textStyle: TextStyle(
                                                           color: Colors.black,
@@ -208,7 +224,7 @@ class _HomeState extends State<Home> {
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: "R\$ ${(snapshot.data['total'] - initialInvestment).toStringAsFixed(2)}",
+                                                      text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['total'] - initialInvestment)}",
                                                       style: GoogleFonts.inter(
                                                         textStyle: TextStyle(
                                                           fontWeight: FontWeight.bold,
@@ -285,19 +301,19 @@ class _HomeState extends State<Home> {
                                   children: [
                                     SingleChildScrollView(
                                       child: Container(
-                                        padding: EdgeInsets.only(top: 20),
+                                        padding: EdgeInsets.only(top: 0),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: <Widget>[
+                                            const SizedBox(
+                                              width: 40,
+                                            ),
                                             AspectRatio(
-                                              aspectRatio: 1.3,
+                                              aspectRatio: 1.4,
                                               child: Container(
                                                 child: Column(
                                                   children: <Widget>[
-                                                    const SizedBox(
-                                                      height: 14,
-                                                    ),
                                                     Expanded(
                                                       child: AspectRatio(
                                                         aspectRatio: 1,
@@ -307,21 +323,25 @@ class _HomeState extends State<Home> {
                                                                 show: false,
                                                               ),
                                                               sectionsSpace: 0,
-                                                              centerSpaceRadius: 75,
-                                                              sections: showingSections((snapshot.data['fiis_total'] * 100 / snapshot.data['total']).toStringAsFixed(1), (snapshot.data['stocks_total'] * 100 / snapshot.data['total']).toStringAsFixed(1))
+                                                              centerSpaceRadius: 55,
+                                                              sections: showingSections(
+                                                                (snapshot.data['fiis_total'] * 100 / snapshot.data['total']).toStringAsFixed(1),
+                                                                (snapshot.data['stocks_total'] * 100 / snapshot.data['total']).toStringAsFixed(1),
+                                                                (snapshot.data['crypto_total'] * 100 / snapshot.data['total']).toStringAsFixed(1)
+                                                              )
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 8.0),
+                                                      padding: const EdgeInsets.only(top: 4.0),
                                                       child: Row(
                                                         mainAxisSize: MainAxisSize.max,
                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: const <Widget>[
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                                                             child: Indicator(
                                                               color: Color(0xff1B88DF),
                                                               text: 'Ações',
@@ -329,10 +349,18 @@ class _HomeState extends State<Home> {
                                                             ),
                                                           ),
                                                           Padding(
-                                                            padding: EdgeInsets.all(8.0),
+                                                            padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                                                             child: Indicator(
                                                               color: Color(0xffFBAA32),
                                                               text: 'Fiis',
+                                                              isSquare: false,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                                                            child: Indicator(
+                                                              color: Color(0xff9759CF),
+                                                              text: 'Cripto',
                                                               isSquare: false,
                                                             ),
                                                           ),
@@ -359,7 +387,7 @@ class _HomeState extends State<Home> {
                                                       ),
                                                     ),
                                                     const SizedBox(
-                                                      width: 28,
+                                                      width: 20,
                                                     ),
                                                   ],
                                                 ),
@@ -402,7 +430,7 @@ class _HomeState extends State<Home> {
                                                               children: [
                                                                 RichText(
                                                                   text: TextSpan(
-                                                                    text: "R\$ ${(stocksInitialInvestment).toStringAsFixed(2)} ",
+                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(stocksInitialInvestment)} ",
                                                                     style: GoogleFonts.inter(
                                                                       textStyle: TextStyle(
                                                                         color: Colors.black,
@@ -420,7 +448,7 @@ class _HomeState extends State<Home> {
                                                                         ),
                                                                       ),
                                                                       TextSpan(
-                                                                        text: "R\$ ${(snapshot.data['stocks_total'] - stocksInitialInvestment).toStringAsFixed(2)}",
+                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['stocks_total'] - stocksInitialInvestment)}",
                                                                         style: GoogleFonts.inter(
                                                                           textStyle: TextStyle(
                                                                             fontWeight: FontWeight.bold,
@@ -480,7 +508,7 @@ class _HomeState extends State<Home> {
                                                               children: [
                                                                 RichText(
                                                                   text: TextSpan(
-                                                                    text: "R\$ ${(fiisInitialInvestment).toStringAsFixed(2)} ",
+                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(fiisInitialInvestment)}",
                                                                     style: GoogleFonts.inter(
                                                                       textStyle: TextStyle(
                                                                         color: Colors.black,
@@ -498,11 +526,89 @@ class _HomeState extends State<Home> {
                                                                         ),
                                                                       ),
                                                                       TextSpan(
-                                                                        text: "R\$ ${(snapshot.data['fiis_total'] - fiisInitialInvestment).toStringAsFixed(2)}",
+                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['fiis_total'] - fiisInitialInvestment)}",
                                                                         style: GoogleFonts.inter(
                                                                           textStyle: TextStyle(
                                                                             fontWeight: FontWeight.bold,
                                                                             color: (snapshot.data['fiis_total'] - fiisInitialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
+                                                                            fontSize: 14,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: ")",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                                                  Card(
+                                                    color: Color(0xffFAFBFE),
+                                                    shape: RoundedRectangleBorder(
+                                                      side: BorderSide(color: Color(0xffdde2e7), width: 2),
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    elevation: 0,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: <Widget>[
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text: "Investimento em criptomoedas",
+                                                                style: GoogleFonts.inter(
+                                                                textStyle: TextStyle(
+                                                                  color: Color(0xFF2A2B2D),
+                                                                  fontSize: 18,
+                                                                  fontWeight: FontWeight.bold,
+                                                                ),
+                                                              ),
+                                                              ),
+                                                            ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(top: 8.0),
+                                                            child: Row(
+                                                              children: [
+                                                                RichText(
+                                                                  text: TextSpan(
+                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(cryptoInitialInvestment)} ",
+                                                                    style: GoogleFonts.inter(
+                                                                      textStyle: TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontSize: 18,
+                                                                      ),
+                                                                    ),
+                                                                    children: <TextSpan>[
+                                                                      TextSpan(
+                                                                        text: "(",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['crypto_total'] - cryptoInitialInvestment)} ",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            fontWeight: FontWeight.bold,
+                                                                            color: (snapshot.data['crypto_total'] - cryptoInitialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
                                                                             fontSize: 14,
                                                                           ),
                                                                         ),
@@ -699,6 +805,105 @@ class _HomeState extends State<Home> {
                                                         RichText(
                                                           text: TextSpan(
                                                             text: "R\$ ${snapshot.data['fiis'][fiisNames[index]]['amount_invested'].toStringAsFixed(2)}",
+                                                            style: GoogleFonts.inter(
+                                                            textStyle: TextStyle(
+                                                              color: Color(0xFF2A2B2D),
+                                                              fontSize: 20,
+                                                            ),
+                                                          ),
+                                                            children: <TextSpan>[
+                                                              TextSpan(
+                                                                text: "\nQtd investida",
+                                                                style: GoogleFonts.inter(
+                                                                  textStyle: TextStyle(
+                                                                    color: Color(0xFF777777),
+                                                                    fontSize: 12,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                      },
+                                  ),
+                                    ),
+                                    Container(
+                                      child: ListView.builder(
+                                      itemCount: snapshot.data['crypto'].length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.circular(15.0),
+                                                child: Card(
+                                                  shape: Border(
+                                                    left: BorderSide(
+                                                      color: snapshot.data['crypto'][cryptoNames[index]]['change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                      width: 5
+                                                    )
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children: <Widget>[
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            text: cryptoNames[index],
+                                                            style: GoogleFonts.inter(
+                                                            textStyle: TextStyle(
+                                                              color: Color(0xFF2A2B2D),
+                                                              fontSize: 25,
+                                                            ),
+                                                          ),
+                                                            children: <TextSpan>[
+                                                              TextSpan(
+                                                                text: "\n ${snapshot.data['crypto'][cryptoNames[index]]['change_percent'].toStringAsFixed(2)}%",
+                                                                style: GoogleFonts.inter(
+                                                                  textStyle: TextStyle(
+                                                                    color: snapshot.data['crypto'][cryptoNames[index]]['change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                                    fontSize: 15,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            text: "R\$ ${snapshot.data['crypto'][cryptoNames[index]]['price'].toStringAsFixed(2)}",
+                                                            style: GoogleFonts.inter(
+                                                            textStyle: TextStyle(
+                                                              color: Color(0xFF2A2B2D),
+                                                              fontSize: 20,
+                                                            ),
+                                                          ),
+                                                            children: <TextSpan>[
+                                                              TextSpan(
+                                                                text: "\nValor do papel",
+                                                                style: GoogleFonts.inter(
+                                                                  textStyle: TextStyle(
+                                                                    color: Color(0xFF777777),
+                                                                    fontSize: 12,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            text: "R\$ ${snapshot.data['crypto'][cryptoNames[index]]['amount_invested'].toStringAsFixed(2)}",
                                                             style: GoogleFonts.inter(
                                                             textStyle: TextStyle(
                                                               color: Color(0xFF2A2B2D),
