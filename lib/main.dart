@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xff1B88DF),
+            color: const Color(0xff2D99FE),
             value: double.parse(stock_pct),
             title: '${stock_pct}%',
             radius: radius,
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
           );
         case 1:
           return PieChartSectionData(
-            color: const Color(0xffFBAA32),
+            color: const Color(0xffFD825D),
             value: double.parse(fii_pct),
             title: '${fii_pct}%',
             radius: radius,
@@ -69,13 +69,22 @@ class _HomeState extends State<Home> {
           );
         case 2:
           return PieChartSectionData(
-            color: const Color(0xff9759CF),
+            color: const Color(0xff816AF8),
             value: double.parse(crypto_pct),
             title: '${crypto_pct}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
           );
+        // case 3:
+        //   return PieChartSectionData(
+        //     color: const Color(0xff2CD9C5),
+        //     value: double.parse(cash_pct),
+        //     title: '${cash_pct}%',
+        //     radius: radius,
+        //     titleStyle: TextStyle(
+        //         fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+        //   );
         default:
           return null;
       }
@@ -102,16 +111,16 @@ class _HomeState extends State<Home> {
 
   var _total = 0;
 
-  var initialInvestment = 3058.48;
-  var stocksInitialInvestment = 1613.83;
-  var fiisInitialInvestment = 1194.65;
-  var cryptoInitialInvestment = 250.0;
+  // var initialInvestment = 5172.811;
+  // var fiisInitialInvestment = 1365.121;
+  // var cryptoInitialInvestment = 250.0;
 
-  var stocksNames = ['ALSO3', 'BBAS3', 'BIDI11',
-    'BRFS3', 'CYRE3', 'ENEV3', 'GMAT3', 'GOAU4', 'ITUB4', 'LAME4', 'LREN3', 'LWSA3',
-    'MGLU3', 'NTCO3', 'PETR4', 'PSSA3', 'RLOG3', 'TOTS3', 'VALE3', 'VIVT3'];
+  var stocksNames = ['AERI3', 'ALSO3', 'ARZZ3', 'BBAS3', 'BIDI11', 'BMGB4',
+    'BPAN4', 'BRFS3', 'CYRE3', 'ENEV3', 'GMAT3', 'GOAU4', 'ITUB4', 'LAME4', 'LPSB3', 'LREN3', 'LWSA3',
+    'NGRD3', 'NTCO3', 'PETR4', 'RDOR3', 'RRRP3', 'TAEE11', 'TOTS3', 'VALE3',
+    ];
 
-  var fiisNames = ['ALZR11', 'BCFF11', 'HGLG11', 'HGBS11', 'TEPP11'];
+  var fiisNames = ['HGLG11', 'TEPP11', 'BCRI11', 'HFOF11', 'HCTR11'];
 
   var cryptoNames = ['BTC', 'ETH'];
 
@@ -166,9 +175,9 @@ class _HomeState extends State<Home> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: TabBar(
-                                          indicatorColor: Colors.grey,
+                                          indicatorColor: Colors.cyan,
                                           labelColor: Colors.black,
-                                          unselectedLabelColor: Colors.grey,
+                                          unselectedLabelColor: Colors.blueGrey,
                                           isScrollable: true,
                                           tabs: [
                                             Tab(text: "Resumo"),
@@ -206,7 +215,7 @@ class _HomeState extends State<Home> {
                                               padding: EdgeInsets.only(left: 20),
                                               child: RichText(
                                                 text: TextSpan(
-                                                  text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(initialInvestment)}",
+                                                  text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['initial_investment'])}",
                                                   style: GoogleFonts.inter(
                                                     textStyle: TextStyle(
                                                       color: Colors.black,
@@ -224,11 +233,11 @@ class _HomeState extends State<Home> {
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['total'] - initialInvestment)}",
+                                                      text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['total'] - snapshot.data['initial_investment'])}",
                                                       style: GoogleFonts.inter(
                                                         textStyle: TextStyle(
                                                           fontWeight: FontWeight.bold,
-                                                          color: (snapshot.data['total'] - initialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
+                                                          color: (snapshot.data['total'] - snapshot.data['initial_investment']) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
                                                           fontSize: 22,
                                                         ),
                                                       ),
@@ -327,7 +336,7 @@ class _HomeState extends State<Home> {
                                                               sections: showingSections(
                                                                 (snapshot.data['fiis_total'] * 100 / snapshot.data['total']).toStringAsFixed(1),
                                                                 (snapshot.data['stocks_total'] * 100 / snapshot.data['total']).toStringAsFixed(1),
-                                                                (snapshot.data['crypto_total'] * 100 / snapshot.data['total']).toStringAsFixed(1)
+                                                                (snapshot.data['crypto_total'] * 100 / snapshot.data['total']).toStringAsFixed(1),
                                                               )
                                                           ),
                                                         ),
@@ -343,7 +352,7 @@ class _HomeState extends State<Home> {
                                                           Padding(
                                                             padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                                                             child: Indicator(
-                                                              color: Color(0xff1B88DF),
+                                                              color: Color(0xff2D99FE),
                                                               text: 'Ações',
                                                               isSquare: false,
                                                             ),
@@ -351,7 +360,7 @@ class _HomeState extends State<Home> {
                                                           Padding(
                                                             padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                                                             child: Indicator(
-                                                              color: Color(0xffFBAA32),
+                                                              color: Color(0xffFD825D),
                                                               text: 'Fiis',
                                                               isSquare: false,
                                                             ),
@@ -359,11 +368,19 @@ class _HomeState extends State<Home> {
                                                           Padding(
                                                             padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                                                             child: Indicator(
-                                                              color: Color(0xff9759CF),
+                                                              color: Color(0xff816AF8),
                                                               text: 'Cripto',
                                                               isSquare: false,
                                                             ),
                                                           ),
+                                                          // Padding(
+                                                          //   padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                                                          //   child: Indicator(
+                                                          //     color: Color(0xff2CD9C5),
+                                                          //     text: 'Caixa',
+                                                          //     isSquare: false,
+                                                          //   ),
+                                                          // ),
                                                           // SizedBox(
                                                           //   height: 4,
                                                           // ),
@@ -430,7 +447,7 @@ class _HomeState extends State<Home> {
                                                               children: [
                                                                 RichText(
                                                                   text: TextSpan(
-                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(stocksInitialInvestment)} ",
+                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['stocks_initial_investment'])} ",
                                                                     style: GoogleFonts.inter(
                                                                       textStyle: TextStyle(
                                                                         color: Colors.black,
@@ -448,11 +465,11 @@ class _HomeState extends State<Home> {
                                                                         ),
                                                                       ),
                                                                       TextSpan(
-                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['stocks_total'] - stocksInitialInvestment)}",
+                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['stocks_total'] - snapshot.data['stocks_initial_investment'])}",
                                                                         style: GoogleFonts.inter(
                                                                           textStyle: TextStyle(
                                                                             fontWeight: FontWeight.bold,
-                                                                            color: (snapshot.data['stocks_total'] - stocksInitialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
+                                                                            color: (snapshot.data['stocks_total'] - snapshot.data['stocks_initial_investment']) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
                                                                             fontSize: 14,
                                                                           ),
                                                                         ),
@@ -508,7 +525,7 @@ class _HomeState extends State<Home> {
                                                               children: [
                                                                 RichText(
                                                                   text: TextSpan(
-                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(fiisInitialInvestment)}",
+                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['fiis_initial_investment'])}",
                                                                     style: GoogleFonts.inter(
                                                                       textStyle: TextStyle(
                                                                         color: Colors.black,
@@ -526,11 +543,11 @@ class _HomeState extends State<Home> {
                                                                         ),
                                                                       ),
                                                                       TextSpan(
-                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['fiis_total'] - fiisInitialInvestment)}",
+                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['fiis_total'] - snapshot.data['fiis_initial_investment'])}",
                                                                         style: GoogleFonts.inter(
                                                                           textStyle: TextStyle(
                                                                             fontWeight: FontWeight.bold,
-                                                                            color: (snapshot.data['fiis_total'] - fiisInitialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
+                                                                            color: (snapshot.data['fiis_total'] - snapshot.data['fiis_initial_investment']) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
                                                                             fontSize: 14,
                                                                           ),
                                                                         ),
@@ -541,6 +558,26 @@ class _HomeState extends State<Home> {
                                                                           textStyle: TextStyle(
                                                                             color: Colors.black,
                                                                             fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+
+                                                                      TextSpan(
+                                                                        text: "\n\nDividendos: ",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['fiis_dy_month_total'])}",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            fontWeight: FontWeight.bold,
+                                                                            color: Color(0xFF00B071),
+                                                                            fontSize: 14,
                                                                           ),
                                                                         ),
                                                                       ),
@@ -586,7 +623,7 @@ class _HomeState extends State<Home> {
                                                               children: [
                                                                 RichText(
                                                                   text: TextSpan(
-                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(cryptoInitialInvestment)} ",
+                                                                    text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['cryptos_initial_investment'])} ",
                                                                     style: GoogleFonts.inter(
                                                                       textStyle: TextStyle(
                                                                         color: Colors.black,
@@ -604,11 +641,11 @@ class _HomeState extends State<Home> {
                                                                         ),
                                                                       ),
                                                                       TextSpan(
-                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['crypto_total'] - cryptoInitialInvestment)} ",
+                                                                        text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['crypto_total'] - snapshot.data['cryptos_initial_investment'])} ",
                                                                         style: GoogleFonts.inter(
                                                                           textStyle: TextStyle(
                                                                             fontWeight: FontWeight.bold,
-                                                                            color: (snapshot.data['crypto_total'] - cryptoInitialInvestment) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
+                                                                            color: (snapshot.data['crypto_total'] - snapshot.data['cryptos_initial_investment']) < 0 ? Color(0xFFE94375) : Color(0xFF00B071),
                                                                             fontSize: 14,
                                                                           ),
                                                                         ),
@@ -656,76 +693,143 @@ class _HomeState extends State<Home> {
                                                   ),
                                                   child: Padding(
                                                     padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    child: Column(
                                                       children: <Widget>[
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: stocksNames[index],
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 25,
-                                                            ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 16.0),
+                                                          child: Row(
+                                                            children: [
+                                                              RichText(
+                                                                text: TextSpan(
+                                                                  text: stocksNames[index],
+                                                                  style: GoogleFonts.inter(
+                                                                    textStyle: TextStyle(
+                                                                      color: Color(0xFF2A2B2D),
+                                                                      fontSize: 23,
+                                                                    ),
+                                                                  ),
+                                                                  children: <TextSpan>[
+                                                                    TextSpan(
+                                                                      text: " (",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 15,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: "${snapshot.data['stocks'][stocksNames[index]]['daily_change_percent'].toStringAsFixed(2)}%",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          fontWeight: FontWeight.bold,
+                                                                          color: snapshot.data['stocks'][stocksNames[index]]['daily_change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                                          fontSize: 14,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: ")",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 15,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
-                                                            children: <TextSpan>[
-                                                              TextSpan(
-                                                                text: "\n ${snapshot.data['stocks'][stocksNames[index]]['change_percent'].toStringAsFixed(2)}%",
-                                                                style: GoogleFonts.inter(
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 0.0),
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              RichText(
+                                                                text: TextSpan(
+                                                                  text: "R\$ ${snapshot.data['stocks'][stocksNames[index]]['price'].toStringAsFixed(2)}",
+                                                                  style: GoogleFonts.inter(
                                                                   textStyle: TextStyle(
-                                                                    color: snapshot.data['stocks'][stocksNames[index]]['change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                                    color: Color(0xFF2A2B2D),
                                                                     fontSize: 15,
                                                                   ),
                                                                 ),
+                                                                  children: <TextSpan>[
+                                                                    TextSpan(
+                                                                      text: "\nValor do papel",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Color(0xFF777777),
+                                                                          fontSize: 11,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "R\$ ${snapshot.data['stocks'][stocksNames[index]]['price'].toStringAsFixed(2)}",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),
-                                                            children: <TextSpan>[
-                                                              TextSpan(
-                                                                text: "\nValor do papel",
-                                                                style: GoogleFonts.inter(
-                                                                  textStyle: TextStyle(
-                                                                    color: Color(0xFF777777),
-                                                                    fontSize: 12,
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(left: 16.0),
+                                                                child: RichText(
+                                                                  text: TextSpan(
+                                                                    text: "R\$ ${snapshot.data['stocks'][stocksNames[index]]['gain'].toStringAsFixed(2)}",
+                                                                    style: GoogleFonts.inter(
+                                                                    textStyle: TextStyle(
+                                                                      fontWeight: FontWeight.bold,
+                                                                      color: snapshot.data['stocks'][stocksNames[index]]['gain'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                                      fontSize: 15,
+                                                                    ),
+                                                                  ),
+                                                                    children: <TextSpan>[
+                                                                      TextSpan(
+                                                                      text: " (",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          fontWeight: FontWeight.normal,
+                                                                          color: Color(0xFF2A2B2D),
+                                                                          fontSize: 14,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: "${snapshot.data['stocks'][stocksNames[index]]['change_percent'].toStringAsFixed(2)}%",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          fontWeight: FontWeight.normal,
+                                                                          color: Color(0xFF2A2B2D),
+                                                                          fontSize: 13,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: ")",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          fontWeight: FontWeight.normal,
+                                                                          color: Color(0xFF2A2B2D),
+                                                                          fontSize: 14,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                      TextSpan(
+                                                                        text: "\nGanhos",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            fontWeight: FontWeight.normal,
+                                                                            color: Color(0xFF777777),
+                                                                            fontSize: 11,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ),
                                                             ],
                                                           ),
                                                         ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "R\$ ${snapshot.data['stocks'][stocksNames[index]]['amount_invested'].toStringAsFixed(2)}",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),
-                                                            children: <TextSpan>[
-                                                              TextSpan(
-                                                                text: "\nQtd investida",
-                                                                style: GoogleFonts.inter(
-                                                                  textStyle: TextStyle(
-                                                                    color: Color(0xFF777777),
-                                                                    fontSize: 12,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ]
                                                     ),
                                                   ),
                                                 ),
@@ -749,82 +853,175 @@ class _HomeState extends State<Home> {
                                                 child: Card(
                                                   shape: Border(
                                                     left: BorderSide(
-                                                      color: snapshot.data['fiis'][fiisNames[index]]['change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                      color: snapshot.data['fiis'][fiisNames[index]]['daily_change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
                                                       width: 5
                                                     )
                                                   ),
                                                   child: Padding(
                                                     padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 20.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    child: Column(
                                                       children: <Widget>[
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: fiisNames[index],
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 25,
-                                                            ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 16.0),
+                                                          child: Row(
+                                                            children: [
+                                                              RichText(
+                                                                text: TextSpan(
+                                                                  text: fiisNames[index],
+                                                                  style: GoogleFonts.inter(
+                                                                    textStyle: TextStyle(
+                                                                      color: Color(0xFF2A2B2D),
+                                                                      fontSize: 23,
+                                                                    ),
+                                                                  ),
+                                                                  children: <TextSpan>[
+                                                                    TextSpan(
+                                                                      text: " (",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 15,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: "${snapshot.data['fiis'][fiisNames[index]]['daily_change_percent'].toStringAsFixed(2)}%",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          fontWeight: FontWeight.bold,
+                                                                          color: snapshot.data['fiis'][fiisNames[index]]['daily_change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                                          fontSize: 14,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: ")",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 15,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
-                                                            children: <TextSpan>[
-                                                              TextSpan(
-                                                                text: "\n ${snapshot.data['fiis'][fiisNames[index]]['change_percent'].toStringAsFixed(2)}%",
-                                                                style: GoogleFonts.inter(
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 0.0),
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              RichText(
+                                                                text: TextSpan(
+                                                                  text: "R\$ ${snapshot.data['fiis'][fiisNames[index]]['price'].toStringAsFixed(2)}",
+                                                                  style: GoogleFonts.inter(
                                                                   textStyle: TextStyle(
-                                                                    color: snapshot.data['fiis'][fiisNames[index]]['change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                                    color: Color(0xFF2A2B2D),
                                                                     fontSize: 15,
                                                                   ),
                                                                 ),
+                                                                  children: <TextSpan>[
+                                                                    TextSpan(
+                                                                      text: "\nValor do papel",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Color(0xFF777777),
+                                                                          fontSize: 11,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "R\$ ${snapshot.data['fiis'][fiisNames[index]]['price'].toStringAsFixed(2)}",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),
-                                                            children: <TextSpan>[
-                                                              TextSpan(
-                                                                text: "\nValor do papel",
-                                                                style: GoogleFonts.inter(
-                                                                  textStyle: TextStyle(
-                                                                    color: Color(0xFF777777),
-                                                                    fontSize: 12,
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(left: 16.0),
+                                                                child: RichText(
+                                                                  text: TextSpan(
+                                                                    text: "R\$ ${snapshot.data['fiis'][fiisNames[index]]['gain'].toStringAsFixed(2)}",
+                                                                    style: GoogleFonts.inter(
+                                                                    textStyle: TextStyle(
+                                                                      color: Color(0xFF2A2B2D),
+                                                                      fontSize: 15,
+                                                                    ),
+                                                                  ),
+                                                                    children: <TextSpan>[
+                                                                      TextSpan(
+                                                                      text: " (",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 14,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: "${snapshot.data['fiis'][fiisNames[index]]['change_percent'].toStringAsFixed(2)}%",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          fontWeight: FontWeight.bold,
+                                                                          color: snapshot.data['fiis'][fiisNames[index]]['change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
+                                                                          fontSize: 13,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text: ")",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 14,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                      TextSpan(
+                                                                        text: "\nGanhos",
+                                                                        style: GoogleFonts.inter(
+                                                                          textStyle: TextStyle(
+                                                                            color: Color(0xFF777777),
+                                                                            fontSize: 11,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ),
                                                             ],
                                                           ),
                                                         ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            text: "R\$ ${snapshot.data['fiis'][fiisNames[index]]['amount_invested'].toStringAsFixed(2)}",
-                                                            style: GoogleFonts.inter(
-                                                            textStyle: TextStyle(
-                                                              color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),
-                                                            children: <TextSpan>[
-                                                              TextSpan(
-                                                                text: "\nQtd investida",
-                                                                style: GoogleFonts.inter(
+                                                        Padding(
+                                                          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 0.0),
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              RichText(
+                                                                text: TextSpan(
+                                                                  text: "R\$ ${snapshot.data['fiis'][fiisNames[index]]['last_dy'].toStringAsFixed(2)}",
+                                                                  style: GoogleFonts.inter(
                                                                   textStyle: TextStyle(
-                                                                    color: Color(0xFF777777),
-                                                                    fontSize: 12,
+                                                                    color: Color(0xFF29A37D),
+                                                                    fontSize: 15,
+                                                                    fontWeight: FontWeight.bold,
                                                                   ),
+                                                                ),
+                                                                  children: <TextSpan>[
+                                                                    TextSpan(
+                                                                      text: "\nDividendos do mês",
+                                                                      style: GoogleFonts.inter(
+                                                                        textStyle: TextStyle(
+                                                                          color: Color(0xFF777777),
+                                                                          fontSize: 11,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ),
                                                             ],
                                                           ),
                                                         ),
-                                                      ],
+                                                      ]
                                                     ),
                                                   ),
                                                 ),
@@ -863,7 +1060,7 @@ class _HomeState extends State<Home> {
                                                             style: GoogleFonts.inter(
                                                             textStyle: TextStyle(
                                                               color: Color(0xFF2A2B2D),
-                                                              fontSize: 25,
+                                                              fontSize: 23,
                                                             ),
                                                           ),
                                                             children: <TextSpan>[
@@ -872,7 +1069,8 @@ class _HomeState extends State<Home> {
                                                                 style: GoogleFonts.inter(
                                                                   textStyle: TextStyle(
                                                                     color: snapshot.data['crypto'][cryptoNames[index]]['change_percent'] < 0 ? Color(0xFFED3B51) : Color(0xFF29A37D),
-                                                                    fontSize: 15,
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontSize: 13,
                                                                   ),
                                                                 ),
                                                               ),
@@ -881,11 +1079,11 @@ class _HomeState extends State<Home> {
                                                         ),
                                                         RichText(
                                                           text: TextSpan(
-                                                            text: "R\$ ${snapshot.data['crypto'][cryptoNames[index]]['price'].toStringAsFixed(2)}",
+                                                            text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['crypto'][cryptoNames[index]]['price'])}",
                                                             style: GoogleFonts.inter(
                                                             textStyle: TextStyle(
                                                               color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
+                                                              fontSize: 18,
                                                             ),
                                                           ),
                                                             children: <TextSpan>[
@@ -894,7 +1092,7 @@ class _HomeState extends State<Home> {
                                                                 style: GoogleFonts.inter(
                                                                   textStyle: TextStyle(
                                                                     color: Color(0xFF777777),
-                                                                    fontSize: 12,
+                                                                    fontSize: 11,
                                                                   ),
                                                                 ),
                                                               ),
@@ -903,20 +1101,20 @@ class _HomeState extends State<Home> {
                                                         ),
                                                         RichText(
                                                           text: TextSpan(
-                                                            text: "R\$ ${snapshot.data['crypto'][cryptoNames[index]]['amount_invested'].toStringAsFixed(2)}",
+                                                            text: "${NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2).format(snapshot.data['crypto'][cryptoNames[index]]['gain'])}",
                                                             style: GoogleFonts.inter(
                                                             textStyle: TextStyle(
                                                               color: Color(0xFF2A2B2D),
-                                                              fontSize: 20,
+                                                              fontSize: 18,
                                                             ),
                                                           ),
                                                             children: <TextSpan>[
                                                               TextSpan(
-                                                                text: "\nQtd investida",
+                                                                text: "\nGanhos",
                                                                 style: GoogleFonts.inter(
                                                                   textStyle: TextStyle(
                                                                     color: Color(0xFF777777),
-                                                                    fontSize: 12,
+                                                                    fontSize: 11,
                                                                   ),
                                                                 ),
                                                               ),

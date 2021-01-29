@@ -1,36 +1,39 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'investment_data.dart';
 
-Future<Map> _cryptoMap (cryptoName, qtd) async {
-  http.Response stockResponse = await http.get("https://api.nomics.com/v1/currencies/ticker?key=demo-26240835858194712a4f8cc0dc635c7a&ids=${cryptoName}&interval=1d,30d&convert=BRL&per-page=100&page=1");
+Future<Map> _cryptoMap (cryptos) async {
+  http.Response stockResponse = await http.get("https://api.nomics.com/v1/currencies/ticker?key=demo-b5d84e505a11969a7184f899fbb40ae1&ids=${cryptos['name']}&interval=1d,30d&convert=BRL&per-page=100&page=1");
 
   return {
-    "symbol": cryptoName,
-    "amount_invested": qtd * double.parse(json.decode(stockResponse.body)[0]["price"]),
+    "symbol": cryptos['name'],
+    "gain": (cryptos['qtdBought'] * double.parse(json.decode(stockResponse.body)[0]["price"])) - (cryptos['qtdBought'] * cryptos['valueBought']),
     "price": double.parse(json.decode(stockResponse.body)[0]["price"]),
-    "change_percent": double.parse(json.decode(stockResponse.body)[0]["1d"]["price_change_pct"]) * 100,
+    "change_percent": (100 - (cryptos['valueBought'] * 100) /  double.parse(json.decode(stockResponse.body)[0]["price"])),
+    "daily_change_percent": double.parse(json.decode(stockResponse.body)[0]["1d"]["price_change_pct"]) * 100,
+    "qtd_invested": cryptos['qtdBought'] * double.parse(json.decode(stockResponse.body)[0]["price"]),
   };
 }
 
-Future<Map> _fiisMap (fiisName, qtd) async {
-  http.Response stockResponse = await http.get("https://mfinance.com.br/api/v1/fiis?symbols=${fiisName}");
+Future<Map> _fiisMap (fiis) async {
+  http.Response stockResponse = await http.get("https://mfinance.com.br/api/v1/fiis?symbols=${fiis['name']}");
+  http.Response dy = await http.get("https://mfinance.com.br/api/v1/fiis/dividends/${fiis['name']}");
+
+  print(json.decode(dy.body)["dividends"][0]["value"]);
 
   return {
-    "symbol": fiisName,
-    "amount_invested": qtd * json.decode(stockResponse.body)[0]["lastPrice"],
+    "symbol": fiis['name'],
+    "last_dy": fiis['qtdBought'] * json.decode(dy.body)["dividends"][0]["value"],
+    "gain": (fiis['qtdBought'] * json.decode(stockResponse.body)[0]["lastPrice"]) - (fiis['qtdBought'] * fiis['valueBought']),
     "price": json.decode(stockResponse.body)[0]["lastPrice"],
-    "change_percent": json.decode(stockResponse.body)[0]["change"],
+    "change_percent": ((fiis['qtdBought'] * json.decode(stockResponse.body)[0]["lastPrice"]) / fiis['valueBought']) - 1,
+    "daily_change_percent": json.decode(stockResponse.body)[0]["change"],
+    "qtd_invested": fiis['qtdBought'] * json.decode(stockResponse.body)[0]["lastPrice"],
   };
 }
 
-Future<Map> _stockMap (stockName, qtd) async {
-  print("stockName: ");
-  print(stockName);
-
-  print("qtd: ");
-  print(qtd);
-
-  http.Response stockResponse = await http.get("https://mfinance.com.br/api/v1/stocks?symbols=${stockName}");
+Future<Map> _stockMap (stocks) async {
+  http.Response stockResponse = await http.get("https://mfinance.com.br/api/v1/stocks?symbols=${stocks['name']}");
 
   print(json.decode(stockResponse.body)["stocks"]);
 
@@ -38,29 +41,31 @@ Future<Map> _stockMap (stockName, qtd) async {
 
   if (shouldIEnter) {
     return {
-      "symbol": stockName,
-      "amount_invested": qtd * json.decode(stockResponse.body)["stocks"][0]["lastPrice"],
+      "symbol": stocks['name'],
+      "gain": (stocks['qtdBought'] * json.decode(stockResponse.body)["stocks"][0]["lastPrice"]) - (stocks['qtdBought'] * stocks['valueBought']),
       "price": json.decode(stockResponse.body)["stocks"][0]["lastPrice"],
-      "change_percent": json.decode(stockResponse.body)["stocks"][0]["change"],
+      "change_percent": (json.decode(stockResponse.body)["stocks"][0]["lastPrice"] * 100 / stocks['valueBought']) - 100,
+      "daily_change_percent": json.decode(stockResponse.body)["stocks"][0]["change"],
+      "qtd_invested": stocks['qtdBought'] * json.decode(stockResponse.body)["stocks"][0]["lastPrice"],
     };
   } else {
 
-    stockResponse = await http.get("https://api.hgbrasil.com/finance/stock_price?key=2e240911&symbol=${stockName}");
-    shouldIEnter = json.decode(stockResponse.body)["results"][stockName]["error"] == true ? false : true;
+    stockResponse = await http.get("https://api.hgbrasil.com/finance/stock_price?key=2e240911&symbol=${stocks['name']}");
+    shouldIEnter = json.decode(stockResponse.body)["results"][stocks['name']]["error"] == true ? false : true;
 
     if (shouldIEnter) {
       return {
-        "symbol": stockName,
-        "amount_invested": qtd * json.decode(stockResponse.body)["results"][stockName]["price"],
-        "price": json.decode(stockResponse.body)["results"][stockName]["price"],
-        "change_percent": json.decode(stockResponse.body)["results"][stockName]["change_percent"],
+        "symbol": stocks['name'],
+        "gain": (stocks['qtdBought'] * json.decode(stockResponse.body)["results"][stocks['name']]["price"]) - (stocks['qtdBought'] * stocks['valueBought']),
+        "price": json.decode(stockResponse.body)["results"][stocks['name']]["price"],
+        "change_percent": json.decode(stockResponse.body)["results"][stocks['name']]["change_percent"],
       };
     } else {
-      stockResponse = await http.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockName}.SAO&apikey=X0KLX0CI9BQBNGFR");
+      stockResponse = await http.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stocks['name']}.SAO&apikey=X0KLX0CI9BQBNGFR");
 
       return {
         "symbol": json.decode(stockResponse.body)["Global Quote"]["01. symbol"].replaceAll('.SAO', ''),
-        "amount_invested": qtd * double.parse(json.decode(stockResponse.body)["Global Quote"]["05. price"]),
+        "gain": (stocks['qtdBought'] * double.parse(json.decode(stockResponse.body)["Global Quote"]["05. price"])) - (stocks['qtdBought'] * stocks['valueBought']),
         "price": double.parse(json.decode(stockResponse.body)["Global Quote"]["05. price"]),
         "change_percent": double.parse(json.decode(stockResponse.body)["Global Quote"]["10. change percent"].replaceAll('%', '')),
       };
@@ -69,77 +74,73 @@ Future<Map> _stockMap (stockName, qtd) async {
 }
 
 Future<Map> totalizer() async {
-  var stocksNames = ['ALSO3', 'BBAS3', 'BIDI11',
-    'BRFS3', 'CYRE3', 'ENEV3', 'GMAT3', 'GOAU4', 'ITUB4', 'LAME4', 'LREN3', 'LWSA3',
-    'MGLU3', 'NTCO3', 'PETR4', 'PSSA3', 'RLOG3', 'TOTS3', 'VALE3', 'VIVT3'];
+  var tickers = variableIncomeData();
 
-  var fiisNames = ['ALZR11', 'BCFF11', 'HGLG11', 'HGBS11', 'TEPP11'];
-
-  var cryptoNames = ['BTC', 'ETH'];
-
-  var stocksQuantities = [2.0, 4.0, 2.0, 2.0, 2.0, 1.0,
-    3.0, 4.0, 2.0, 2.0, 2.0, 1.0, 4.0, 3.0, 3.0,
-    1.0, 1.0, 2.0, 2.0, 1.0];
-
-  var fiisQuantities = [2.0, 2.0, 2.0, 1.0, 2.0];
-
-  var cryptoQuantities = [0.00051275, 0.02161401];
-
-  var stocksObj = {};
   var total = 0.0;
-  
-  for (var stock in stocksNames) {
-    stocksObj[stock] = {};
-  }
 
-  for (var fii in fiisNames) {
-    stocksObj[fii] = {};
-  }
+  // var cashInvestment = 2194.82;
+
+  // var cashInvestment = 1455.2;
 
   var _totalizer = new Map<String, dynamic>();
   
   _totalizer['total'] = 0.0;
   _totalizer['stocks_total'] = 0.0;
   _totalizer['fiis_total'] = 0.0;
+  _totalizer['fiis_dy_month_total'] = 0.0;
   _totalizer['crypto_total'] = 0.0;
 
+  _totalizer['stocks_initial_investment'] = 0.0;
+  _totalizer['fiis_initial_investment'] = 0.0;
+  _totalizer['cryptos_initial_investment'] = 0.0;
+
+  _totalizer['initial_investment'] = 0.0;
 
   _totalizer['stocks'] = new Map<String, dynamic>();
   _totalizer['fiis'] = new Map<String, dynamic>();
   _totalizer['crypto'] = new Map<String, dynamic>();
 
-  for (var i = 0; i < cryptoNames.length; i++) {
-    _totalizer['crypto'][cryptoNames[i]] = await _cryptoMap(cryptoNames[i], cryptoQuantities[i]);
+  for (var i = 0; i < tickers['cryptos'].length; i++) {
+    _totalizer['crypto'][tickers['cryptos'][i].map['name']] = await _cryptoMap(tickers['cryptos'][i].map);
   }
 
-  for (var i = 0; i < fiisNames.length; i++) {
-    _totalizer['fiis'][fiisNames[i]] = await _fiisMap(fiisNames[i], fiisQuantities[i]);
+  for (var i = 0; i < tickers['fiis'].length; i++) {
+    _totalizer['fiis'][tickers['fiis'][i].map['name']] = await _fiisMap(tickers['fiis'][i].map);
   }
 
-  for (var i = 0; i < stocksNames.length; i++) {
-    _totalizer['stocks'][stocksNames[i]] = await _stockMap(stocksNames[i], stocksQuantities[i]);
+  for (var i = 0; i < tickers['stocks'].length; i++) {
+    _totalizer['stocks'][tickers['stocks'][i].map['name']] = await _stockMap(tickers['stocks'][i].map);
   }
 
  ///////////////////////////////////////////////////////////////////////////////////////////////
 
-  for (var i = 0; i < cryptoNames.length; i++) { 
-    total = total + _totalizer['crypto'][cryptoNames[i]]['amount_invested'];
-    _totalizer['crypto_total'] = _totalizer['crypto_total'] + _totalizer['crypto'][cryptoNames[i]]['amount_invested'];
+  for (var i = 0; i < tickers['cryptos'].length; i++) { 
+    total = total + _totalizer['crypto'][tickers['cryptos'][i].map['name']]['qtd_invested'];
+    _totalizer['crypto_total'] = _totalizer['crypto_total'] + _totalizer['crypto'][tickers['cryptos'][i].map['name']]['qtd_invested'];
+
+    _totalizer['cryptos_initial_investment'] = _totalizer['cryptos_initial_investment'] + (tickers['cryptos'][i].map['qtdBought'] * tickers['cryptos'][i].map['valueBought']);
   }
 
-  for (var i = 0; i < fiisNames.length; i++) { 
-    total = total + _totalizer['fiis'][fiisNames[i]]['amount_invested'];
-    _totalizer['fiis_total'] = _totalizer['fiis_total'] + _totalizer['fiis'][fiisNames[i]]['amount_invested'];
+  for (var i = 0; i < tickers['fiis'].length; i++) { 
+    total = total + _totalizer['fiis'][tickers['fiis'][i].map['name']]['qtd_invested'];
+    _totalizer['fiis_total'] = _totalizer['fiis_total'] + _totalizer['fiis'][tickers['fiis'][i].map['name']]['qtd_invested'];
+
+    _totalizer['fiis_dy_month_total'] = _totalizer['fiis_dy_month_total'] + _totalizer['fiis'][tickers['fiis'][i].map['name']]['last_dy'];
+
+    _totalizer['fiis_initial_investment'] = _totalizer['fiis_initial_investment'] + (tickers['fiis'][i].map['qtdBought'] * tickers['fiis'][i].map['valueBought']);
   }
 
-  for (var i = 0; i < stocksNames.length; i++) { 
-    total = total + _totalizer['stocks'][stocksNames[i]]['amount_invested'];
-    _totalizer['stocks_total'] = _totalizer['stocks_total'] + _totalizer['stocks'][stocksNames[i]]['amount_invested'];
+  for (var i = 0; i < tickers['stocks'].length; i++) { 
+    total = total + _totalizer['stocks'][tickers['stocks'][i].map['name']]['qtd_invested'];
+    _totalizer['stocks_total'] = _totalizer['stocks_total'] + _totalizer['stocks'][tickers['stocks'][i].map['name']]['qtd_invested'];
+
+    _totalizer['stocks_initial_investment'] = _totalizer['stocks_initial_investment'] + (tickers['stocks'][i].map['qtdBought'] * tickers['stocks'][i].map['valueBought']);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////
 
   _totalizer['total'] = _totalizer['stocks_total'] + _totalizer['fiis_total'] + _totalizer['crypto_total'];
+  _totalizer['initial_investment'] = _totalizer['cryptos_initial_investment'] + _totalizer['fiis_initial_investment'] + _totalizer['stocks_initial_investment'];
 
   return _totalizer;
 }
